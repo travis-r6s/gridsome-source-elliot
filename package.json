@@ -10,7 +10,8 @@
     "email": "travis@travisreynolds.dev"
   },
   "scripts": {
-    "build": "rollup src/gridsome.server.js --file lib/gridsome.server.js --format cjs"
+    "develop": "rollup --config --watch",
+    "build": "rollup --config"
   },
   "dependencies": {
     "got": "^11.1.4"
