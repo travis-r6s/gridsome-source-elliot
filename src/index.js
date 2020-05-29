@@ -64,8 +64,8 @@ async function ElliotSource (api, options = {}) {
 
   const loadProducts = async actions => {
     const productStore = actions.getCollection(TYPENAMES.PRODUCT)
-    const imageStore = actions.getCollection(TYPENAMES.IMAGE)
     const skuStore = actions.getCollection(TYPENAMES.SKU)
+    const imageStore = actions.getCollection(TYPENAMES.IMAGE)
 
     const variables = { checkoutId: ELLIOT_STORE_FRONT_ID, domainId: ELLIOT_DOMAIN_ID }
     const { data, errors } = await elliot.post(endpoint, { json: { query: PRODUCTS_QUERY, variables } })
@@ -74,6 +74,7 @@ async function ElliotSource (api, options = {}) {
 
     report(`Added ${data.node.products.edges.length} products`)
     for (const { node: product } of data.node.products.edges) {
+      const collections = product.collections.edges.map(({ node }) => actions.store.createReference(TYPENAMES.COLLECTION, node.id))
       const skus = product.skus.edges.map(({ node }) => {
         const skuNode = skuStore.addNode({ ...node, product: actions.store.createReference(TYPENAMES.PRODUCT, product.id) })
         return actions.store.createReference(skuNode)
@@ -82,7 +83,6 @@ async function ElliotSource (api, options = {}) {
         const imageNode = imageStore.addNode(node)
         return actions.store.createReference(imageNode)
       })
-      const collections = product.collections.edges.map(({ node }) => actions.store.createReference(TYPENAMES.COLLECTION, node.id))
 
       const metadata = product.metadata.edges.map(({ node }) => node)
       const customMetadata = product.customMetadata.edges.map(({ node }) => node)
