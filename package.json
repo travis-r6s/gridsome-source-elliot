@@ -1,14 +1,26 @@
 {
   "name": "gridsome-source-elliot",
-  "version": "0.1.0",
   "description": "Elliot source plugin for Gridsome",
+  "version": "0.1.0",
   "main": "src/index.js",
-  "repository": "git@github.com:thetre97/gridsome-source-elliot.git",
   "license": "MIT",
+  "engines": {
+    "node": ">=10.x"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:thetre97/gridsome-source-elliot.git"
+  },
   "author": {
     "name": "Travis Reynolds",
     "email": "travis@travisreynolds.dev"
   },
+  "keywords": [
+    "gridsome",
+    "gridsome-plugin",
+    "gridsome-source",
+    "elliot"
+  ],
   "dependencies": {
     "got": "^11.1.4"
   },
