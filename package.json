@@ -8,5 +8,14 @@
   "author": {
     "name": "Travis Reynolds",
     "email": "travis@travisreynolds.dev"
+  },
+  "scripts": {
+    "build": "rollup src/gridsome.server.js --file lib/gridsome.server.js --format cjs"
+  },
+  "dependencies": {
+    "got": "^11.1.4"
+  },
+  "devDependencies": {
+    "rollup": "^2.11.2"
   }
 }
