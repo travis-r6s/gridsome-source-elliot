@@ -25,7 +25,8 @@ module.exports = {
     {
       use: 'gridsome-source-elliot',
       options: {
-        keys: '<Elliot ENV keys>'
+        keys: '<Elliot ENV keys>',
+        logs: true
       }
     }
   ],
