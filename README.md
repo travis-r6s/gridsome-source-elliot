@@ -2,7 +2,7 @@
 
 > Elliot source plugin for Gridsome
 
-This plugin sources data from [Elliot](https://elliot.store), using the headless API. It simplifies the process of querying the data, and removes certain unecessary fields (i.e. admin-specific fields).
+This plugin sources data from [Elliot](https://elliot.store), using their headless API. It simplifies the process of querying the data, and removes certain unecessary fields (i.e. admin-specific fields).
 
 ## Install
 
