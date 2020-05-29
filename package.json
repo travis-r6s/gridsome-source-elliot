@@ -14,9 +14,13 @@
     "build": "rollup --config"
   },
   "dependencies": {
+    "@babel/core": "^7.10.1",
+    "@babel/preset-env": "^7.10.1",
     "got": "^11.1.4"
   },
   "devDependencies": {
+    "@rollup/plugin-babel": "^5.0.2",
+    "@rollup/plugin-node-resolve": "^8.0.0",
     "eslint-config-travisreynolds-node": "^1.1.8",
     "rollup": "^2.11.2"
   }
