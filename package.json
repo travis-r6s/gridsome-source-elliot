@@ -2,7 +2,7 @@
   "name": "gridsome-source-elliot",
   "version": "0.1.0",
   "description": "Elliot source plugin for Gridsome",
-  "main": "gridsome.server.js",
+  "main": "lib/gridsome.server.js",
   "repository": "git@github.com:thetre97/gridsome-source-elliot.git",
   "license": "MIT",
   "author": {
