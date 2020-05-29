@@ -16,6 +16,7 @@
     "got": "^11.1.4"
   },
   "devDependencies": {
+    "eslint-config-travisreynolds-node": "^1.1.8",
     "rollup": "^2.11.2"
   }
 }
