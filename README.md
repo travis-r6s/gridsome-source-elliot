@@ -2,9 +2,7 @@
 
 > Elliot source plugin for Gridsome
 
-This plugin sources data from [Elliot](https://elliot.store) using its headless API.
-
-It simplifies the process of querying data from the headless API, and removes certain unecessary fields (i.e. admin-specific fields).
+This plugin sources data from [Elliot](https://elliot.store), using the headless API. It simplifies the process of querying the data, and removes certain unecessary fields (i.e. admin-specific fields).
 
 ## Install
 
@@ -27,7 +25,7 @@ module.exports = {
     {
       use: 'gridsome-source-elliot',
       options: {
-        envs: '<Elliot ENV key>'
+        keys: '<Elliot ENV keys>'
       }
     }
   ],
@@ -49,7 +47,7 @@ It is recommended to add these to a `.env` file at the root of your project, as 
 
 `.env`
 ```
-ELLIOT_ENVS="<paste keys here>"
+ELLIOT_KEYS="<paste variable string here>"
 ```
 
 Then use this ENV in your config:
@@ -61,7 +59,7 @@ module.exports = {
     {
       use: 'gridsome-source-elliot',
       options: {
-        envs: process.env.ELLIOT_ENVS
+        keys: process.env.ELLIOT_KEYS
       }
     }
   ]

@@ -12,12 +12,12 @@ const TYPENAMES = {
 
 async function ElliotSource (api, options = {}) {
   // Setup Options & Defaults
-  const { envs, logs = true, endpoint = 'https://admin.elliot.store/api' } = options
+  const { keys, logs = true, endpoint = 'https://admin.elliot.store/api' } = options
 
   // Checks
-  if (!envs) throw new Error('You must provide the Elliot ENV keys.')
+  if (!keys) throw new Error('You must provide the Elliot keys.')
 
-  const [ELLIOT_DOMAIN_ID, ELLIOT_STORE_FRONT_ID, ELLIOT_STORE_FRONT_NAME, ELLIOT_API_KEY] = envs.split('|')
+  const [ELLIOT_DOMAIN_ID, ELLIOT_STORE_FRONT_ID, ELLIOT_STORE_FRONT_NAME, ELLIOT_API_KEY] = keys.split('|')
 
   // Setup Elliot Client
   const elliot = got.extend({
