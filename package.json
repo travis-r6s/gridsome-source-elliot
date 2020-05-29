@@ -2,27 +2,17 @@
   "name": "gridsome-source-elliot",
   "version": "0.1.0",
   "description": "Elliot source plugin for Gridsome",
-  "main": "lib/gridsome.server.js",
+  "main": "src/index.js",
   "repository": "git@github.com:thetre97/gridsome-source-elliot.git",
   "license": "MIT",
   "author": {
     "name": "Travis Reynolds",
     "email": "travis@travisreynolds.dev"
   },
-  "scripts": {
-    "develop": "rollup --config --watch",
-    "build": "rollup --config"
-  },
   "dependencies": {
     "got": "^11.1.4"
   },
   "devDependencies": {
-    "@babel/core": "^7.10.1",
-    "@babel/preset-env": "^7.10.1",
-    "@rollup/plugin-babel": "^5.0.2",
-    "@rollup/plugin-commonjs": "^12.0.0",
-    "@rollup/plugin-node-resolve": "^8.0.0",
-    "eslint-config-travisreynolds-node": "^1.1.8",
-    "rollup": "^2.11.2"
+    "eslint-config-travisreynolds-node": "^1.1.8"
   }
 }
