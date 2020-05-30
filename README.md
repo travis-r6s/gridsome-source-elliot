@@ -2,7 +2,7 @@
 
 > Elliot source plugin for Gridsome
 
-This plugin sources data from [Elliot](https://elliot.store), using their headless API. It simplifies the process of querying the data, and removes certain unecessary fields (i.e. admin-specific fields).
+This plugin sources data from [Elliot](https://elliot.store), using their headless API. It simplifies the process of querying the data, removes certain unecessary fields (i.e. admin-specific fields), and adds support for `g-image`.
 
 ## Install
 
@@ -16,7 +16,7 @@ NPM:
 npm install gridsome-source-elliot
 ```
 
-### Usage
+## Usage
 
 `gridsome.config.js`
 ```js
@@ -25,8 +25,7 @@ module.exports = {
     {
       use: 'gridsome-source-elliot',
       options: {
-        keys: '<Elliot ENV keys>',
-        logs: true
+        keys: '<Elliot ENV keys>'
       }
     }
   ],
@@ -68,3 +67,13 @@ module.exports = {
 ```
 
 And you are good to go! Try exploring the different queries in the GraphQL Playground.
+
+## Options
+
+There are a couple of options you can change if needed - their descriptions and defaults are listed below:
+
+| Option | Description | Default |
+|-|-|-|
+| `logs` | Whether to show some simple reports on the number of products & collections added, and images downloaded. | `false` |
+| `download` | An option to either disable the download of images, or change the path they are downloaded to. | `.images/elliot` |
+| `overwrite` | The downloader will skip images that already exist locally, but you can force it to download every image if needed. | `false` |
