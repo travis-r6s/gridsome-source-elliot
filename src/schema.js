@@ -25,16 +25,15 @@ const ProductSchema = `type Product implements Node {
   skus: [Sku]
   images: [Images]
   image: Image
-  productSeo: [Seo]
+  seo: Seo
   customMetadata: [CustomProductMetadata]
   metadata: [ProductMetadata]
   collections: [Collection]
   isVendor: Boolean
   attributes: JSON
   quantity: Int
-  activeCheckoutCount: Int
   variantCount: Int
-  relatedProducts: [Product]
+  related: [Product]
 }`
 
 const SKUSchema = `type Sku implements Node {

@@ -119,6 +119,21 @@ const PRODUCTS_QUERY = `query checkout($checkoutId: ID! $domainId: ID!) {
                 }
               }
             }
+            relatedProducts {
+              edges {
+                node {
+                  id
+                }
+              }
+            }
+            productSeo {
+              edges {
+                node {
+                  title
+                  description
+                }
+              }
+            }
           }
         }
       }

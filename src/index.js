@@ -97,6 +97,7 @@ async function ElliotSource (api, options = {}) {
     report(`Added ${data.node.products.edges.length} products`)
     for await (const { node: product } of data.node.products.edges) {
       const collections = product.collections.edges.map(({ node }) => actions.store.createReference(TYPENAMES.COLLECTION, node.id))
+      const related = product.relatedProducts.edges.map(({ node }) => actions.store.createReference(TYPENAMES.PRODUCT, node.id))
       const skus = product.skus.edges.map(({ node }) => {
         const skuNode = skuStore.addNode({ ...node, product: actions.store.createReference(TYPENAMES.PRODUCT, product.id) })
         return actions.store.createReference(skuNode)
@@ -107,10 +108,11 @@ async function ElliotSource (api, options = {}) {
         return { image: localPath }
       })
 
+      const seo = product.productSeo.edges.map(({ node }) => node)[ 0 ]
       const metadata = product.metadata.edges.map(({ node }) => node)
       const customMetadata = product.customMetadata.edges.map(({ node }) => node)
 
-      productStore.addNode({ ...product, skus, images, image: images[ 0 ].image, collections, metadata, customMetadata })
+      productStore.addNode({ ...product, skus, images, related, collections, seo, metadata, customMetadata })
     }
   }
 
