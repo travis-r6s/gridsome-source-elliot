@@ -22,7 +22,9 @@
     "elliot"
   ],
   "dependencies": {
-    "got": "^11.1.4"
+    "fs-extra": "^9.0.0",
+    "got": "^11.1.4",
+    "p-map": "^4.0.0"
   },
   "devDependencies": {
     "eslint-config-travisreynolds-node": "^1.1.8"

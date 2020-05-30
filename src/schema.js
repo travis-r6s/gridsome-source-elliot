@@ -23,7 +23,8 @@ const ProductSchema = `type Product implements Node {
   downloadUrl: String
   archived: Boolean
   skus: [Sku]
-  images: [ElliotImage]
+  images: [Images]
+  image: Image
   productSeo: [Seo]
   customMetadata: [CustomProductMetadata]
   metadata: [ProductMetadata]
@@ -60,10 +61,8 @@ const SKUSchema = `type Sku implements Node {
   attributes: JSON
 }`
 
-const ImageSchema = `type ElliotImage implements Node @infer {
-  id: ID
-  url: String
-  image: String
+const ImageSchema = `type Images {
+  image: Image
 }`
 
 const SEOSchema = `type Seo @infer {

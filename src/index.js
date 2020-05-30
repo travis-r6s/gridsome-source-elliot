@@ -1,4 +1,9 @@
+const fs = require('fs-extra')
 const got = require('got').default
+const path = require('path')
+const pMap = require('p-map')
+const { promisify } = require('util')
+const stream = require('stream')
 
 const { PRODUCTS_QUERY, COLLECTIONS_QUERY } = require('./queries')
 const { ProductSchema, SKUSchema, ImageSchema, SEOSchema, ProductMetadata, CollectionSchema } = require('./schema')
@@ -12,7 +17,7 @@ const TYPENAMES = {
 
 async function ElliotSource (api, options = {}) {
   // Setup Options & Defaults
-  const { keys, logs = true, endpoint = 'https://admin.elliot.store/api' } = options
+  const { keys, logs = false, endpoint = 'https://admin.elliot.store/api', download = '.images/elliot', overwrite = false } = options
 
   // Checks
   if (!keys) throw new Error('You must provide the Elliot keys.')
@@ -26,6 +31,21 @@ async function ElliotSource (api, options = {}) {
     responseType: 'json'
   })
 
+  // Setup Image Client & Download Folder
+  const imageQueue = {
+    images: new Map(),
+    client: got.extend({
+      prefixUrl: 'https://storage.googleapis.com/elliot-images-us/'
+    }),
+    add (url) {
+      const localFolder = path.join(process.cwd(), download)
+      const localPath = `${localFolder}/${url}`
+      this.images.set(url, localPath)
+      return localPath
+    }
+  }
+
+  // Simple function to log reports if logs enabled
   const report = log => logs && console.log(log)
 
   api.loadSource(async actions => {
@@ -43,6 +63,9 @@ async function ElliotSource (api, options = {}) {
     // Load Data
     await loadCollections(actions)
     await loadProducts(actions)
+
+    // Download Images
+    if (download) await downloadImages()
   })
 
   const loadCollections = async actions => {
@@ -65,7 +88,6 @@ async function ElliotSource (api, options = {}) {
   const loadProducts = async actions => {
     const productStore = actions.getCollection(TYPENAMES.PRODUCT)
     const skuStore = actions.getCollection(TYPENAMES.SKU)
-    const imageStore = actions.getCollection(TYPENAMES.IMAGE)
 
     const variables = { checkoutId: ELLIOT_STORE_FRONT_ID, domainId: ELLIOT_DOMAIN_ID }
     const { data, errors } = await elliot.post(endpoint, { json: { query: PRODUCTS_QUERY, variables } })
@@ -73,22 +95,41 @@ async function ElliotSource (api, options = {}) {
     if (errors) throw new Error(errors[ 0 ].message)
 
     report(`Added ${data.node.products.edges.length} products`)
-    for (const { node: product } of data.node.products.edges) {
+    for await (const { node: product } of data.node.products.edges) {
       const collections = product.collections.edges.map(({ node }) => actions.store.createReference(TYPENAMES.COLLECTION, node.id))
       const skus = product.skus.edges.map(({ node }) => {
         const skuNode = skuStore.addNode({ ...node, product: actions.store.createReference(TYPENAMES.PRODUCT, product.id) })
         return actions.store.createReference(skuNode)
       })
+
       const images = product.images.edges.map(({ node }) => {
-        const imageNode = imageStore.addNode(node)
-        return actions.store.createReference(imageNode)
+        const localPath = imageQueue.add(node.image)
+        return { image: localPath }
       })
 
       const metadata = product.metadata.edges.map(({ node }) => node)
       const customMetadata = product.customMetadata.edges.map(({ node }) => node)
 
-      productStore.addNode({ ...product, skus, images, collections, metadata, customMetadata })
+      productStore.addNode({ ...product, skus, images, image: images[ 0 ].image, collections, metadata, customMetadata })
     }
+  }
+
+  const downloadImages = async actions => {
+    const images = imageQueue.images.entries()
+    const pipeline = promisify(stream.pipeline)
+    if (overwrite) await fs.emptyDir(path.join(process.cwd(), download))
+
+    const existing = []
+    const downloaded = []
+    await pMap(images, async ([url, localPath], i) => {
+      const imageExists = await fs.exists(localPath)
+      if (imageExists) return existing.push(i)
+      downloaded.push(i)
+      await fs.ensureFile(localPath)
+      return pipeline(imageQueue.client.stream(url), fs.createWriteStream(localPath))
+    })
+
+    report(`Downloaded ${downloaded.length} images (${existing.length} existed)`)
   }
 }
 
