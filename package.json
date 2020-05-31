@@ -1,7 +1,7 @@
 {
   "name": "gridsome-source-elliot",
   "description": "Elliot source plugin for Gridsome",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "src/index.js",
   "license": "MIT",
   "engines": {
