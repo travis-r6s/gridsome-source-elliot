@@ -1,6 +1,6 @@
 // 'Custom' defined schemas, to make sure fields are always available in the Gridsome Schema, and to remove any admin-specific fields
 
-const ProductSchema = `type Product implements Node {
+const ProductSchema = `type Product implements Node @infer {
   id: ID
   productChannel: String
   createdOn: Date
@@ -24,7 +24,6 @@ const ProductSchema = `type Product implements Node {
   archived: Boolean
   skus: [Sku]
   images: [Images]
-  image: Image
   seo: Seo
   customMetadata: [CustomProductMetadata]
   metadata: [ProductMetadata]
@@ -64,9 +63,7 @@ const ImageSchema = `type Images {
   image: Image
 }`
 
-const SEOSchema = `type Seo @infer {
-  createdOn: Date
-  modifiedOn: Date
+const SEOSchema = `type Seo {
   title: String
   description: String
 }`
@@ -86,10 +83,7 @@ type ProductMetadata {
   productCategoryTag3: String
   productHtsCode: String
 }
-type CustomProductMetadata @infer {
-  id: ID
-  createdOn: Date
-  modifiedOn: Date
+type CustomProductMetadata {
   name: String
   value: String
   type: CustomProductMetadataType
