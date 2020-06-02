@@ -1,6 +1,6 @@
 // 'Custom' defined schemas, to make sure fields are always available in the Gridsome Schema, and to remove any admin-specific fields
 
-const ProductSchema = `type Product implements Node @infer {
+const ProductSchema = `type Product implements Node {
   id: ID
   productChannel: String
   createdOn: Date
