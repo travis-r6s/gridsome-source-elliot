@@ -11,8 +11,7 @@ const { ProductSchema, SKUSchema, ImageSchema, SEOSchema, ProductMetadata, Colle
 const TYPENAMES = {
   PRODUCT: 'Product',
   SKU: 'Sku',
-  COLLECTION: 'Collection',
-  IMAGE: 'ElliotImage'
+  COLLECTION: 'Collection'
 }
 
 async function ElliotSource (api, options = {}) {
@@ -54,7 +53,6 @@ async function ElliotSource (api, options = {}) {
     // Create Collections
     actions.addCollection(TYPENAMES.COLLECTION)
     actions.addCollection(TYPENAMES.PRODUCT)
-    actions.addCollection(TYPENAMES.IMAGE)
     actions.addCollection(TYPENAMES.SKU)
 
     // Setup Schema
