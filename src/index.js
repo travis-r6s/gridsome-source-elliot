@@ -95,7 +95,10 @@ async function ElliotSource (api, options = {}) {
     report(`Added ${data.node.products.edges.length} products`)
     for await (const { node: product } of data.node.products.edges) {
       const collections = product.collections.edges.map(({ node }) => actions.store.createReference(TYPENAMES.COLLECTION, node.id))
-      const related = product.relatedProducts.edges.map(({ node }) => actions.store.createReference(TYPENAMES.PRODUCT, node.id))
+      const related = product.relatedProducts.edges.map(({ node: { slug } }) => {
+        const { node: product } = data.node.products.edges.find(({ node }) => node.slug === slug)
+        return actions.store.createReference(TYPENAMES.PRODUCT, product.id)
+      })
 
       const skus = product.skus.edges.map(({ node }) => {
         const skuNode = skuStore.addNode({ ...node, product: actions.store.createReference(TYPENAMES.PRODUCT, product.id) })

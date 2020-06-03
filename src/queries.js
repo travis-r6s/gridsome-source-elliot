@@ -123,6 +123,7 @@ const PRODUCTS_QUERY = `query checkout($checkoutId: ID! $domainId: ID!) {
               edges {
                 node {
                   id
+                  slug
                 }
               }
             }
