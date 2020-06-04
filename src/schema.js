@@ -29,7 +29,7 @@ const ProductSchema = `type Product implements Node {
   metadata: [ProductMetadata]
   collections: [Collection]
   isVendor: Boolean
-  attributes: JSON
+  attributes: [ProductAttribute]
   quantity: Int
   variantCount: Int
   related: [Product]
@@ -50,7 +50,7 @@ const SKUSchema = `type Sku implements Node {
   product: Product
   url: String
   image: Image
-  attributes: JSON
+  attributes: [SkuAttribute]
 }`
 
 const ImageSchema = `type Images {
@@ -101,11 +101,25 @@ const CollectionSchema = `type Collection implements Node {
   tags: [String]
 }`
 
+const AttributeSchema = `
+type ProductAttribute {
+  key: String
+  name: String
+  values: [String]
+}
+type SkuAttribute {
+  key: String
+  name: String
+  value: String
+}
+`
+
 module.exports = {
   ProductSchema,
   SKUSchema,
   ImageSchema,
   SEOSchema,
   ProductMetadata,
-  CollectionSchema
+  CollectionSchema,
+  AttributeSchema
 }

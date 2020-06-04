@@ -6,7 +6,7 @@ const { promisify } = require('util')
 const stream = require('stream')
 
 const { PRODUCTS_QUERY, COLLECTIONS_QUERY } = require('./queries')
-const { ProductSchema, SKUSchema, ImageSchema, SEOSchema, ProductMetadata, CollectionSchema } = require('./schema')
+const { ProductSchema, SKUSchema, ImageSchema, SEOSchema, ProductMetadata, CollectionSchema, AttributeSchema } = require('./schema')
 
 const TYPENAMES = {
   PRODUCT: 'Product',
@@ -57,7 +57,7 @@ async function ElliotSource (api, options = {}) {
     actions.addCollection(TYPENAMES.SKU)
 
     // Setup Schema
-    actions.addSchemaTypes([ProductSchema, SKUSchema, ImageSchema, SEOSchema, ProductMetadata, CollectionSchema])
+    actions.addSchemaTypes([ProductSchema, SKUSchema, ImageSchema, SEOSchema, ProductMetadata, CollectionSchema, AttributeSchema ])
 
     // Load Data
     await loadCollections(actions)
@@ -104,8 +104,9 @@ async function ElliotSource (api, options = {}) {
       const skus = await pMap(product.skus.edges, ({ node }) => {
         const skuImage = node.image ? imageQueue.add(node.image) : null
         const skuProduct = actions.store.createReference(TYPENAMES.PRODUCT, product.id)
+        const skuAttributes = Object.entries(node.attributes).map(([name, value]) => ({ name, value, key: name.toLowerCase() }))
 
-        const skuNode = skuStore.addNode({ ...node, product: skuProduct, image: skuImage })
+        const skuNode = skuStore.addNode({ ...node, product: skuProduct, image: skuImage, attributes: skuAttributes })
         return actions.store.createReference(skuNode)
       })
 
@@ -114,11 +115,13 @@ async function ElliotSource (api, options = {}) {
         return { image: localPath }
       })
 
+
+      const attributes = product.attributes.map(({ attributeKey, attributeValues }) => ({ name: attributeKey, values: attributeValues, key: attributeKey.toLowerCase() }))
       const seo = product.productSeo.edges.map(({ node }) => node)[ 0 ]
       const metadata = product.metadata.edges.map(({ node }) => node)
       const customMetadata = product.customMetadata.edges.map(({ node }) => node)
 
-      productStore.addNode({ ...product, skus, images, related, collections, seo, metadata, customMetadata })
+      productStore.addNode({ ...product, skus, images, related, collections, attributes, seo, metadata, customMetadata })
     }
   }
 
