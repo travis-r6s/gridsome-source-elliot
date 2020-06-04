@@ -37,6 +37,7 @@ async function ElliotSource (api, options = {}) {
       prefixUrl: 'https://storage.googleapis.com/elliot-images-us/'
     }),
     add (url) {
+      if (!url) return null
       const localFolder = path.join(process.cwd(), download)
       const localPath = `${localFolder}/${url}`
       this.images.set(url, localPath)
@@ -100,8 +101,11 @@ async function ElliotSource (api, options = {}) {
         return actions.store.createReference(TYPENAMES.PRODUCT, product.id)
       })
 
-      const skus = product.skus.edges.map(({ node }) => {
-        const skuNode = skuStore.addNode({ ...node, product: actions.store.createReference(TYPENAMES.PRODUCT, product.id) })
+      const skus = await pMap(product.skus.edges, ({ node }) => {
+        const skuImage = node.image ? imageQueue.add(node.image) : null
+        const skuProduct = actions.store.createReference(TYPENAMES.PRODUCT, product.id)
+
+        const skuNode = skuStore.addNode({ ...node, product: skuProduct, image: skuImage })
         return actions.store.createReference(skuNode)
       })
 

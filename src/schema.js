@@ -54,7 +54,7 @@ const SKUSchema = `type Sku implements Node {
   length: Float
   product: Product
   url: String
-  image: String
+  image: Image
   isVendor: Boolean
   attributes: JSON
 }`

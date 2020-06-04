@@ -64,16 +64,8 @@ const PRODUCTS_QUERY = `query checkout($checkoutId: ID! $domainId: ID!) {
                     weight
                     attributes
                     stripeId
-                    orderSkus {
-                      edges {
-                        node {
-                          sku {
-                            id
-                            sku
-                          }
-                        }
-                      }
-                    }
+                    id
+                    image
                   }
                 }
               }
@@ -96,9 +88,6 @@ const PRODUCTS_QUERY = `query checkout($checkoutId: ID! $domainId: ID!) {
                     country
                     email
                     phoneNumber
-                    stripeConnectUserId
-                    paypalPayoutEmail
-                    domainCommission
                     slug
                   }
                 }
@@ -187,9 +176,6 @@ const CHECKOUT_QUERY = `query checkout($id: ID! $domainId: ID!) {
       promotion {
         id
         label
-        stripeCouponCode
-        startDatetime
-        endDatetime
         discountValue
         discountType
       }
@@ -208,7 +194,6 @@ const CHECKOUT_QUERY = `query checkout($id: ID! $domainId: ID!) {
       }
       domain {
         id
-        stripeConnectUserId
         branding {
           logo
         }
@@ -222,8 +207,6 @@ const CHECKOUT_QUERY = `query checkout($id: ID! $domainId: ID!) {
             }
           }
         }
-        freeShippingThreshold
-        freeShippingThresholdTarget
         company {
           currency
           name
