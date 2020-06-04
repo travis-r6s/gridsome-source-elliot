@@ -13,7 +13,6 @@ const PRODUCTS_QUERY = `query checkout($checkoutId: ID! $domainId: ID!) {
             description
             shortDescription
             insuranceAmount
-            quantity
             slug
             unitOfWeight
             unitOfDimensions
@@ -53,18 +52,18 @@ const PRODUCTS_QUERY = `query checkout($checkoutId: ID! $domainId: ID!) {
                 edges {
                   node {
                     id
+                    deactivated
+                    purchaseLimit
+                    basePrice
+                    salePrice
                     sku
                     width
                     height
                     length
                     unitOfDimensions
                     unitOfWeight
-                    salePrice
-                    basePrice
                     weight
                     attributes
-                    stripeId
-                    id
                     image
                   }
                 }

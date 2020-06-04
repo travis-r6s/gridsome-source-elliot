@@ -37,12 +37,7 @@ const ProductSchema = `type Product implements Node {
 
 const SKUSchema = `type Sku implements Node {
   id: ID
-  createdOn: Date
-  modifiedOn: Date
-  stripeId: String
-  deactivated: Date
   sku: String
-  quantity: Int
   purchaseLimit: Int
   basePrice: Int
   salePrice: Int
@@ -55,7 +50,6 @@ const SKUSchema = `type Sku implements Node {
   product: Product
   url: String
   image: Image
-  isVendor: Boolean
   attributes: JSON
 }`
 
