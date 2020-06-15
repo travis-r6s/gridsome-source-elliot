@@ -115,7 +115,6 @@ async function ElliotSource (api, options = {}) {
         return { image: localPath }
       })
 
-
       const attributes = product.attributes.map(({ attributeKey, attributeValues }) => ({ name: attributeKey, values: attributeValues, key: attributeKey.toLowerCase() }))
       const seo = product.productSeo.edges.map(({ node }) => node)[ 0 ]
       const metadata = product.metadata.edges.map(({ node }) => node)
