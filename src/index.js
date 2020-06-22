@@ -6,7 +6,7 @@ const { promisify } = require('util')
 const stream = require('stream')
 
 const { PRODUCTS_QUERY, COLLECTIONS_QUERY } = require('./queries')
-const { ProductSchema, SKUSchema, ImageSchema, SEOSchema, ProductMetadata, CollectionSchema, AttributeSchema } = require('./schema')
+const createSchema = require('./schema')
 
 const defaultTypes = {
   PRODUCT: 'Product',
@@ -61,7 +61,7 @@ async function ElliotSource (api, options = {}) {
     actions.addCollection(TYPENAMES.SKU)
 
     // Setup Schema
-    actions.addSchemaTypes([ProductSchema, SKUSchema, ImageSchema, SEOSchema, ProductMetadata, CollectionSchema, AttributeSchema])
+    actions.addSchemaTypes(createSchema(typeName))
 
     // Load Data
     await loadCollections(actions)
@@ -119,7 +119,7 @@ async function ElliotSource (api, options = {}) {
         return { image: localPath }
       })
 
-      const attributes = product.attributes.map(({ attributeKey, attributeValues }) => ({ name: attributeKey, values: attributeValues, key: attributeKey.toLowerCase() }))
+      const attributes = Array.isArray(product.attributes) ? product.attributes.map(({ attributeKey, attributeValues }) => ({ name: attributeKey, values: attributeValues, key: attributeKey.toLowerCase() })) : []
       const seo = product.productSeo.edges.map(({ node }) => node)[ 0 ]
       const metadata = product.metadata.edges.map(({ node }) => node)
       const customMetadata = product.customMetadata.edges.map(({ node }) => node)
