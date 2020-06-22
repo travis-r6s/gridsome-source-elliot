@@ -8,7 +8,7 @@ const stream = require('stream')
 const { PRODUCTS_QUERY, COLLECTIONS_QUERY } = require('./queries')
 const { ProductSchema, SKUSchema, ImageSchema, SEOSchema, ProductMetadata, CollectionSchema, AttributeSchema } = require('./schema')
 
-const TYPENAMES = {
+const defaultTypes = {
   PRODUCT: 'Product',
   SKU: 'Sku',
   COLLECTION: 'Collection'
@@ -16,7 +16,7 @@ const TYPENAMES = {
 
 async function ElliotSource (api, options = {}) {
   // Setup Options & Defaults
-  const { keys, logs = false, endpoint = 'https://admin.elliot.store/api', download = '.images/elliot', overwrite = false } = options
+  const { keys, typeName = 'Elliot', logs = false, endpoint = 'https://admin.elliot.store/api', download = '.images/elliot', overwrite = false } = options
 
   // Checks
   if (!keys) throw new Error('You must provide the Elliot keys.')
@@ -45,6 +45,10 @@ async function ElliotSource (api, options = {}) {
     }
   }
 
+  // Helper to prefix types
+  const typeNameHandler = { get: (types, key) => `${typeName}${types[ key ]}` }
+  const TYPENAMES = new Proxy(defaultTypes, typeNameHandler)
+
   // Simple function to log reports if logs enabled
   const report = log => logs && console.log(log)
 
@@ -57,7 +61,7 @@ async function ElliotSource (api, options = {}) {
     actions.addCollection(TYPENAMES.SKU)
 
     // Setup Schema
-    actions.addSchemaTypes([ProductSchema, SKUSchema, ImageSchema, SEOSchema, ProductMetadata, CollectionSchema, AttributeSchema ])
+    actions.addSchemaTypes([ProductSchema, SKUSchema, ImageSchema, SEOSchema, ProductMetadata, CollectionSchema, AttributeSchema])
 
     // Load Data
     await loadCollections(actions)

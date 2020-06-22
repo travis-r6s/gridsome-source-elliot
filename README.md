@@ -74,6 +74,7 @@ There are a couple of options you can change if needed - their descriptions and 
 
 | Option | Description | Default |
 |-|-|-|
+| `typeName` | A string that will be prefixed to all types. | `Elliot` |
 | `logs` | Whether to show some simple reports on the number of products & collections added, and images downloaded. | `false` |
 | `download` | An option to either disable the download of images, or change the path they are downloaded to. | `.images/elliot` |
 | `overwrite` | The downloader will skip images that already exist locally, but you can force it to download every image if needed. | `false` |
