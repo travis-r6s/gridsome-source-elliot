@@ -105,7 +105,7 @@ async function ElliotSource (api, options = {}) {
         return actions.store.createReference(TYPENAMES.PRODUCT, product.id)
       })
 
-      const skus = await pMap(product.skus.edges, ({ node }) => {
+      const skus = await product.skus.edges.map(({ node }) => {
         const skuImage = node.image ? imageQueue.add(node.image) : null
         const skuProduct = actions.store.createReference(TYPENAMES.PRODUCT, product.id)
         const skuAttributes = Object.entries(node.attributes).map(([name, value]) => ({ name, value, key: name.toLowerCase() }))
